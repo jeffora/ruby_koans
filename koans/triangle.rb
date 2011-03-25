@@ -14,7 +14,12 @@
 #   about_triangle_project_2.rb
 #
 def triangle(a, b, c)
+  fail TriangleError.new unless (a > 0 or b > 0 or c > 0)
+  fail TriangleError.new unless (a + b > c) and (a + c > b) and (b + c > a)
   # WRITE THIS CODE
+  return :equilateral if a == b and a == c
+  return :isosceles if a == b or a == c or b == c
+  :scalene
 end
 
 # Error class used in part 2.  No need to change this code.
