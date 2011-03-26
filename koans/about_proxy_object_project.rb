@@ -15,10 +15,36 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 class Proxy
   def initialize(target_object)
     @object = target_object
-    # ADD MORE CODE HERE
+    @messages = Array.new
+    @message_counts = Hash.new(0)
   end
 
   # WRITE CODE HERE
+  def messages
+    @messages
+  end
+  
+  def called?(method_name)
+    @messages.include?(method_name)
+  end
+  
+  def number_of_times_called(method_name)
+    @message_counts[method_name]
+  end
+  
+  def method_missing(method_name, *args, &block)
+    if @object.respond_to?(method_name)
+      @messages << method_name unless @messages.include?(method_name)
+      @message_counts[method_name] += 1
+      @object.send(method_name, *args, &block)
+    else
+      super(method_name, *args, &block)
+    end
+  end
+  
+  def respond_to?(method_name)
+    @object.respond_to?(method_name)
+  end
 end
 
 # The proxy object should pass the following Koan:
